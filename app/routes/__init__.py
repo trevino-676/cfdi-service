@@ -1,0 +1,1 @@
+from app.routes.nomina_routes import nomina_routes
