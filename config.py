@@ -25,3 +25,4 @@ class Config:
     MONGO_URI = environ.get("MONGO_URI")
     DB_NAME = environ.get("DB_NAME")
     NOMINA_COLLECTION = environ.get("NOMINA_COLLECTION")
+    GIRO_COLLECTION = environ.get("GIRO_COLLECTION")
