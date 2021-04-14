@@ -39,7 +39,8 @@ class GiroMongoRepository(Repository):
             print(e)
             return None
 
-    def save(self, giro: dict) -> bool:
+    @staticmethod
+    def save(giro: dict) -> bool:
         """
         Guarda un diccionario con los datos de giro
         :param giro: datos que contiene el documento de giro
