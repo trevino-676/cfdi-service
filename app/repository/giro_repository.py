@@ -18,7 +18,8 @@ class GiroMongoRepository(Repository):
         :return: Documento de con los datos de giro
         """
         try:
-            giro = Giro().find(filters)
+            giro = Giro()
+            giro.find(filters)
             return giro
         except Exception as e:
             print(e)
