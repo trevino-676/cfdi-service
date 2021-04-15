@@ -29,8 +29,9 @@ def get_giro():
     """
     Busca la informacion del giro que se pasa en los filtros
     """
-    filters = make_filters(FilterType.AND if request.json["type"] else FilterType.OR,
-                           request.json["filters"])
+    filters = make_filters(
+        FilterType.AND if request.json["type"] == "and" else FilterType.OR,
+        request.json["filters"])
     giro = giro_service.find_one(filters)
     if giro is not None:
         return make_response(dumps({"status": True, "data": giro}), 200)
@@ -43,8 +44,9 @@ def get_all_giro():
     """
     Busca los documentos de giro que coincidan con los filtros
     """
-    filters = make_filters(FilterType.AND if request.json["type"] else FilterType.OR,
-                           request.json["filters"])
+    filters = make_filters(
+        FilterType.AND if request.json["type"] == "and" else FilterType.OR,
+        request.json["filters"])
     documents_giro = giro_service.find(filters)
     if documents_giro is not None:
         return make_response(dumps({"status": True, "data": documents_giro}), 200)

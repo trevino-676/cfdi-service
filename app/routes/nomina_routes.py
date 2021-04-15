@@ -8,7 +8,7 @@ from bson.json_util import dumps
 from app.service import service
 from app.utils import FilterType, make_filters
 
-nomina_routes = Blueprint('nomina', __name__, url_prefix="/v1/user")
+nomina_routes = Blueprint('nomina', __name__, url_prefix="/v1/nomina")
 
 
 @nomina_routes.route("/", methods=["GET"])
