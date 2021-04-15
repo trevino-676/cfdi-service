@@ -9,3 +9,8 @@ app = Flask(__name__)
 app.config.from_object("config.Config")
 
 mongo = PyMongo(app, authSource="admin")
+
+from app.routes import nomina_routes, giro_routes
+
+app.register_blueprint(nomina_routes)
+app.register_blueprint(giro_routes)
