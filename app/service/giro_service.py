@@ -21,3 +21,6 @@ class GiroService(Service):
 
     def remove(self, id: str = None, giro: dict = None) -> bool:
         return GiroMongoRepository.delete(id, giro)
+
+    def save_all(self, documents: list) -> bool:
+        return GiroMongoRepository.bulk_insert(documents)

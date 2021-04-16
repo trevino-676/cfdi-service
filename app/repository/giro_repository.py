@@ -76,3 +76,19 @@ class GiroMongoRepository(Repository):
         except Exception as e:
             print(e)
             return False
+
+    @staticmethod
+    def bulk_insert(documents: list) -> bool:
+        """
+        Hace una carga masiva de documentos en la base de datos
+        :param documents: lista con los documentos de giro que se van
+            a insertar en la base de datos
+        :return: boolean True si se insertaron correctamente y False
+            si hubo un error
+        """
+        try:
+            Giro.save_all(documents)
+            return True
+        except Exception as e:
+            print(e)
+            return False

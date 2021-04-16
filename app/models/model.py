@@ -34,3 +34,7 @@ class Model(dict):
         mongo_documents = cls.collection.find(filters)
         documents = [document for document in mongo_documents]
         return documents
+
+    @classmethod
+    def save_all(cls, documents: list):
+        cls.collection.insert_many(documents)

@@ -9,7 +9,7 @@ from app.models import Model
 class Nomina(Model):
     collection = mongo.db[app.config["NOMINA_COLLECTION"]]
 
-    def response_data(self) -> dict:
+    def response_data(self, giro: dict) -> dict:
         """response_data
         esta funcion genera un diccionario con la respuesta que se espera.
         :return: (dict) nuevo diccionario con respuesta
@@ -18,28 +18,28 @@ class Nomina(Model):
             "tipo": self.datos["Tipo"] if self.datos["Tipo"] is not None else "N",
             "fecha_comprobante": self.datos["Fecha"],
             "Fecha_cancelacion": "",
-            "giro": "",
+            "giro": giro["giro"],
             "rfc_emisor": self.datos["Rfc"],
             "nombre_direccion": self.datos["Nombre"],
-            "xml_estado": "",
+            "xml_estado": "V",
             "xml_subtotal": "",
-            "giro_subtotal": "",
+            "giro_subtotal": giro["giro_subtotal"],
             "xml_impuesto_gravado": "",
-            "giro_impuesto_gravado": "",
+            "giro_impuesto_gravado": giro["giro_impuesto_gravado"],
             "xml_impuesto_exento": "",
-            "giro_impuesto_exento": "",
-            "xml_otros_pagos": "",
-            "giro_otros_pagos": "",
+            "giro_impuesto_exento": giro["giro_impuesto_exento"],
+            "xml_otros_pagos": self.nomina["TotalOtrosPagos"],
+            "giro_otros_pagos": giro["giro_otros_pagos"],
             "xml_iva": "",
-            "giro_iva": "",
+            "giro_iva": giro["giro_iva"],
             "xml_retencion": "",
-            "giro_retencion": "",
+            "giro_retencion": giro["giro_retencion"],
             "xml_descuento": "",
-            "giro_descuento": "",
-            "xml_total": "",
-            "giro_total": "",
-            "uso": "",
-            "descripcion": "",
+            "giro_descuento": giro["giro_descuento"],
+            "xml_total": self.datos["Total"],
+            "giro_total": giro["giro_total"],
+            "uso": "P01",
+            "descripcion": "Por definir",
             "uuid": self.uuid,
             "semp": ""
         }

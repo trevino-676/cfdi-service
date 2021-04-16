@@ -52,3 +52,27 @@ def get_all_giro():
         return make_response(dumps({"status": True, "data": documents_giro}), 200)
     return make_response(dumps({"status": False, "message": "No se encontro el giro"}),
                          404)
+
+
+@giro_routes.route("/bulk", methods=["POST"])
+def save_all():
+    """
+    Guarda una lista de documentos de giro
+    """
+    documents = request.json["documents"]
+    if type(documents) is not list:
+        resp = make_response(dumps(
+            {"status": False,
+             "message": "Este endpoint solo es para hacer un guardado masivo"}), 500)
+        resp.headers["Content-Type"] = "application/json"
+        return resp
+    if giro_service.save_all(documents):
+        resp = make_response(
+            dumps({"status": True, "message": "Documentos guardados correctamente"}),
+            200)
+        resp.headers["Content-Type"] = "application/json"
+        return resp
+    resp = make_response(
+        dumps({"status": False, "message": "Error al guardar los datos de giro"}), 404)
+    resp.headers["Content-Type"] = "application/json"
+    return resp
