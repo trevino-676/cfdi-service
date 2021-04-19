@@ -2,7 +2,7 @@
 author: Luis Manuel Torres Trevino
 date: 12/04/2021
 """
-from app import mongo, app
+from app import mongo_cfdi as mongo, app
 from app.models import Model
 
 

@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config.from_object("config.Config")
 
 mongo = PyMongo(app, authSource="admin")
+mongo_cfdi = PyMongo(app, uri=app.config["MONGO_CFDI_URI"], authSource="admin")
 
 from app.routes import nomina_routes, giro_routes
 
