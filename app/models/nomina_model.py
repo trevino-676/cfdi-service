@@ -37,7 +37,8 @@ class Nomina(Model):
             "xml_iva": self.impuestos["TrasladoIVA"],
             "giro_iva": giro["giro_iva"] if giro is not None else "",
             "xml_retencion": self.nomina["Deducciones"][
-                "TotalImpuestosRetenidos"] if "Deducciones" in self.nomina else "",
+                "TotalImpuestosRetenidos"] if ("Deducciones" in self.nomina) and (
+                        "TotalImpuestosRetenidos" in self.nomina["Deducciones"]) else "",
             "giro_retencion": giro["giro_retencion"] if giro is not None else "",
             "xml_descuento": "",
             "giro_descuento": giro["giro_descuento"] if giro is not None else "",

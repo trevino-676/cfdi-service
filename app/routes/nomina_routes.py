@@ -41,13 +41,19 @@ def find_all_nominas():
     """
     parameters = request.json
     if validate_params(parameters):
-        nominas = service.find(
-            make_filters(FilterType.AND if parameters["type"] == "and" else FilterType.OR,
-                         parameters["filters"]))
+        if parameters["type"] == "date":
+            nominas = service.find(
+                make_filters(FilterType.DATE, parameters["filters"],
+                             date_field="datos.Fecha"))
+        else:
+            nominas = service.find(
+                make_filters(
+                    FilterType.AND if parameters["type"] == "and" else FilterType.OR,
+                    parameters["filters"]))
     else:
         nominas = service.find({})
 
-    if nominas is None:
+    if nominas is None or len(nominas) == 0:
         resp = make_response(
             dumps({"status": False, "message": "No se encontro ningun recibo de nomina"}),
             404)
