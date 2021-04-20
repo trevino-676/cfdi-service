@@ -30,3 +30,18 @@ def make_filters(type: FilterType, filters: dict) -> dict:
 
     return new_filters
 
+
+def validate_params(params: dict) -> bool:
+    """validate_params
+    Valida si los parametros enviados incluyen el tipo de filtro y
+    los filtros correspondientes.
+    :param params: diccionario con los filros enviados desde el
+        cliente
+    :return: Boolean True si cumplen, False si no
+    """
+    if "type" in params and "filters" in params:
+        if params["type"] == "and" or params["type"] == "or":
+            return True
+        else:
+            return False
+    return False

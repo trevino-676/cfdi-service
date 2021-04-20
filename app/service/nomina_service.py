@@ -2,7 +2,7 @@
 author: Luis Manuel Torres Trevino
 date: 12/04/2021
 """
-from app.models.giro_model import Giro
+from app.models import Giro, Nomina
 from app.service import Service
 from app.repository import Repository
 
@@ -19,7 +19,8 @@ class NominaService(Service):
     def find(self, filters: dict) -> list:
         nominas = self.repository.find(filters)
         result_nomina = []
-        for nomina in nominas:
+        for element in nominas:
+            nomina = Nomina(element)
             giro = self.__find_giro_data(nomina._id)
             result_nomina.append(nomina.response_data(giro))
         return result_nomina
