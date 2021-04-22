@@ -23,7 +23,7 @@ class Nomina(Model):
             "nombre_direccion": self.datos["Nombre"],
             "xml_estado": "V",
             "xml_subtotal": "",
-            "giro_subtotal": giro["giro_subtotal"] if giro is not None else "",
+            "giro_subtotal": giro["subtotal"] if giro is not None else "",
             "xml_impuesto_gravado": self.nomina["Percepciones"][
                 "TotalGravado"] if "Percepciones" in self.nomina else "",
             "giro_impuesto_gravado": giro[
