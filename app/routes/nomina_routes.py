@@ -44,7 +44,7 @@ def find_all_nominas():
         if parameters["type"] == "date":
             nominas = service.find(
                 make_filters(FilterType.DATE, parameters["filters"],
-                             date_field="datos.Fecha"))
+                             date_field="datos.Fecha", rfc_field="datos.Rfc"))
         else:
             nominas = service.find(
                 make_filters(

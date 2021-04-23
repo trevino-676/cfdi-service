@@ -30,6 +30,8 @@ def make_filters(type: FilterType, filters: dict, **kwargs) -> dict:
         if "date_field" in kwargs:
             new_filters = {kwargs["date_field"]: {"$gte": filters["from_date"],
                                                   "$lte": filters["to_date"]}}
+            if "rfc" in filters:
+                new_filters[kwargs["rfc_field"]] = filters["rfc"]
     else:
         raise Exception("The type isn't valid option")
 
