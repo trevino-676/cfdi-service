@@ -19,11 +19,15 @@ class NominaService(Service):
     def find(self, filters: dict) -> list:
         nominas = self.repository.find(filters)
         result_nomina = []
-        for element in nominas:
-            nomina = Nomina(element)
-            giro = self.__find_giro_data(nomina._id)
-            result_nomina.append(nomina.response_data(giro))
-        return result_nomina
+        try:
+            for element in nominas:
+                nomina = Nomina(element)
+                giro = self.__find_giro_data(nomina._id)
+                result_nomina.append(nomina.response_data(giro))
+            return result_nomina
+        except Exception as e:
+            print(e)
+            return []
 
     def __find_giro_data(self, uuid: str) -> dict:
         """
