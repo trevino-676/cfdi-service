@@ -11,6 +11,7 @@ python-test:
       - .cache/pip
   stage: test
   before_script:
+    - ls -a
     - apk add --no-cache g++ make
     - pip install --no-cache-dir -r requirements.txt
     - cat $ENVFILE > .env
