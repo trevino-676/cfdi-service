@@ -2,18 +2,71 @@
 author: Luis Manuel Torres Trevino
 date: 12/04/2021
 """
+import logging
+
 from flask import Flask
 from flask_pymongo import PyMongo
-from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app)
-app.config.from_object("config.Config")
+mongo = PyMongo()
+mongo_cfdi = PyMongo()
+app = None
 
-mongo = PyMongo(app, authSource="admin")
-mongo_cfdi = PyMongo(app, uri=app.config["MONGO_CFDI_URI"], authSource="admin")
 
-from app.routes import nomina_routes, giro_routes
+def create_app(settings_module="config.Config"):
+    global app
+    global mongo
+    global mongo_cfdi
 
-app.register_blueprint(nomina_routes)
-app.register_blueprint(giro_routes)
+    if app is not None:
+        return app
+
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(settings_module)
+
+    configure_logging(app)
+
+    mongo.init_app(app, authSource="admin")
+    mongo_cfdi.init_app(app, uri=app.config["MONGO_CFDI_URI"], authSource="admin")
+
+    from app.routes import nomina_routes
+    app.register_blueprint(nomina_routes)
+
+    from app.routes import giro_routes
+    app.register_blueprint(giro_routes)
+
+    return app
+
+
+def configure_logging(app: Flask):
+    """
+    Configura el modulo de logs. Establece los manejadores para cada logger.
+
+    :param app (Flask): Instancia de la aplicacion Flask
+    """
+    del app.logger.handlers[:]
+
+    loggers = [app.logger, ]
+    handlers = []
+
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(verbose_formatter())
+
+    if app.config["FLASK_ENV"] == "development" or app.config["FLASK_ENV"] == "test":
+        console_handler.setLevel(logging.DEBUG)
+        handlers.append(console_handler)
+    elif app.config["FLASK_ENV"] == "production":
+        console_handler(logging.INFO)
+        handlers.append(console_handler)
+
+    for l in loggers:
+        for handler in handlers:
+            l.addHandler(handler)
+        l.propagate = False
+        l.setLevel(logging.DEBUG)
+
+
+def verbose_formatter():
+    return logging.Formatter(
+        '[%(asctime)s.%(msecs)d]\t %(levelname)s \t[%(name)s.%(funcName)s:%(lineno)d]\t %(message)s',
+        datefmt='%d/%m/%Y %H:%M:%S'
+    )
