@@ -81,9 +81,14 @@ class Nomina(Model):
             flag = False
 
         if "Deducciones" not in self.nomina:
-            flag = False
+            self.nomina["Deducciones"] = {
+                "TotalOtrasDeducciones": 0
+            }
 
         if "Percepciones" not in self.nomina:
-            flag = False
+            self.nomina["Percepciones"]: {
+                "TotalGravado": 0,
+                "TotalExento": 0
+            }
 
         return flag

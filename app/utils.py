@@ -23,15 +23,24 @@ def make_filters(type: FilterType, filters: dict, **kwargs) -> dict:
     """
     new_filters = {}
     if type == FilterType.AND:
-        new_filters = {"$and": [{item: value} for item, value in filters.items()]}
+        new_filters = {"$and": [{item: value}
+                                for item, value in filters.items()]}
     elif type == FilterType.OR:
-        new_filters = {"$or": [{item: value} for item, value in filters.items()]}
+        new_filters = {"$or": [{item: value}
+                               for item, value in filters.items()]}
     elif type == FilterType.DATE:
-        if "date_field" in kwargs:
-            new_filters = {kwargs["date_field"]: {"$gte": filters["from_date"],
-                                                  "$lte": filters["to_date"]}}
-            if "rfc" in filters:
-                new_filters[kwargs["rfc_field"]] = filters["rfc"]
+        new_filters = {
+            "$and": [
+                {
+                    kwargs["date_field"]:{ 
+                        "$gte": filters["from_date"], "$lte": filters["to_date"]
+                    }
+                }, 
+                {
+                    kwargs["rfc_field"]: filters["rfc"]
+                }
+            ]
+        }
     else:
         raise Exception("The type isn't valid option")
 
