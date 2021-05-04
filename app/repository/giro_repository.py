@@ -6,6 +6,7 @@ from bson import ObjectId
 
 from app.models import Giro
 from app.repository import Repository
+from app import app
 
 
 class GiroMongoRepository(Repository):
@@ -20,9 +21,10 @@ class GiroMongoRepository(Repository):
         try:
             giro = Giro()
             giro.find(filters)
+            app.logger.info(f"Se encontro el documento {str(giro._id)}")
             return giro
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return None
 
     def find(self, filters: dict) -> list:
@@ -35,9 +37,11 @@ class GiroMongoRepository(Repository):
         """
         try:
             giro_documents = Giro.find_all(filters)
+            app.logger.info(
+                f"Se encontraron un total {len(giro_documents)} de documentos")
             return giro_documents
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return None
 
     @staticmethod
@@ -51,9 +55,10 @@ class GiroMongoRepository(Repository):
         try:
             giro = Giro(giro)
             giro.save()
+            app.logger.info("Se guardo el giro correctamente")
             return True
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return False
 
     @staticmethod
@@ -71,10 +76,12 @@ class GiroMongoRepository(Repository):
                 temporal_giro = Giro().find({"_id": ObjectId(id)})
             else:
                 temporal_giro = Giro(giro)
+            app.logger.info(
+                f"Se elimino el documento de giro con id {str(temporal_giro._id)}")
             temporal_giro.remove()
             return True
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return False
 
     @staticmethod
@@ -88,7 +95,8 @@ class GiroMongoRepository(Repository):
         """
         try:
             Giro.save_all(documents)
+            app.logger.info(f"Se guardaron un total de {len(documents)} documentos")
             return True
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return False

@@ -6,7 +6,7 @@ from bson import ObjectId
 
 from app.models import Nomina
 from app.repository import Repository
-
+from app import app
 
 class NominaMongoRepository(Repository):
     def find(self, filters: dict) -> list:
@@ -17,9 +17,10 @@ class NominaMongoRepository(Repository):
         """
         try:
             nominas = Nomina.find_all(filters)
+            app.logger.info(f"Se encontraro {len(nominas)} documentos")
             return nominas
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return None
 
     def find_one(self, filters: dict) -> dict:
@@ -31,8 +32,9 @@ class NominaMongoRepository(Repository):
         try:
             nomina = Nomina()
             nomina.find(filters)
+            app.logger.info(f"Se encontro la nomina {nomina._id}")
             return nomina
         except Exception as e:
-            print(e)
+            app.logger.error(e)
             return None
 

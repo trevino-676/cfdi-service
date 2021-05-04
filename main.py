@@ -2,6 +2,8 @@
 author: Luis Manuel Torres Trevino
 date: 13/04/2021
 """
-from app import app
+from app import create_app
 
-app.run("0.0.0.0", port=5000)
+app = create_app()
+
+app.run(host="0.0.0.0", port=5000)

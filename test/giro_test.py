@@ -5,12 +5,12 @@ date: 30/04/2021
 import unittest
 import json
 
-from app import app
+from app import create_app
 
 
 class GiroTest(unittest.TestCase):
     def setUp(self):
-        self.app = app.test_client()
+        self.app = create_app().test_client()
         self.headers = {"Content-Type": "application/json"}
 
     def test_create_giro(self):
