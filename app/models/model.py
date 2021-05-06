@@ -14,7 +14,7 @@ class Model(dict):
         if not self._id:
             self.collection.insert_one(self)
         else:
-            self.collection.replace_one({"_id": ObjectId(self._id)})
+            self.collection.replace_one({"_id": ObjectId(self._id)}, self)
 
     def reload(self):
         if self._id:

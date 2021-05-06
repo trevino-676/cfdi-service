@@ -25,16 +25,13 @@ class NominaTest(unittest.TestCase):
         else:
             self.assertEqual(200, resp.status_code)
             self.assertEqual(True, resp.json["status"])
-            self.assertEqual(
-                payload["filters"]["datos.Rfc"], resp.json["data"]["rfc_emisor"]
-            )
 
     def test_find_all_nomina(self):
         payload = {
             "type": "date",
             "filters": {
-                "from_date": "2020-01-01",
-                "to_date": "2020-01-04",
+                "from_date": "2021-01-01",
+                "to_date": "2021-01-04",
                 "rfc": "GPR070228780",
             },
         }

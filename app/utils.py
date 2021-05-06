@@ -61,3 +61,33 @@ def validate_params(params: dict) -> bool:
         else:
             return False
     return False
+
+def get_set_dict():
+    return {
+        "tipo": "$datos.Tipo",
+        "fecha_comprobante": "$datos.Fecha",
+        "fecha_cancelacion": "",
+        "giro": {"$cond": [{"$eq": ["$giro_data", None]}, "", "$giro_data.giro"]},
+        "rfc_emisor": "$datos.Rfc",
+        "nombre_direccion": "$datos.Nombre",
+        "xml_estado": "V",
+        "xml_subtotal": "$nomina.TotalPercepciones",
+        "giro_subtotal": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.subtotal"]},
+        "xml_impuesto_gravado": {"$cond": [{"$eq": [{"$type": "$nomina.Percepciones"}, 3]}, "$nomina.Percepciones.TotalGravado", "0.00"]},
+        "giro_impuesto_gravado": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_impuesto_gravado"]},
+        "xml_impuesto_exento": {"$cond": [{"$eq": [{"$type": "$nomina.Percepciones"}, 3]}, "$nomina.Percepciones.TotalExento", "0.00"]},
+        "giro_impuesto_exento": {"$cond": [{"$eq": ["$giro_data", None]}, "", "$giro_data.giro_impuesto_exento"]},
+        "xml_otros_pagos": "$nomina.TotalOtrosPagos",
+        "giro_otros_pagos": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_otros_pagos"]},
+        "xml_iva": {"$toString": "$impuestos.TrasladoIVA"},
+        "giro_iva": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_iva"]},
+        "xml_retencion": {"$cond": [{"$eq": [{"$type": "$nomina.Deducciones"}, 3]}, "$nomina.Deducciones.TotalImpuestosRetenidos", "0.00"]},
+        "giro_retencion": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_retencion"]},
+        "xml_descuento": "",
+        "giro_descuento": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_descuneto"]},
+        "xml_total": "$datos.Total",
+        "giro_total": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_total"]},
+        "uso": "P01",
+        "descripcion": "Por definir",
+        "uuid": "$_id"
+    }
