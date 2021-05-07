@@ -32,10 +32,10 @@ def make_filters(type: FilterType, filters: dict, **kwargs) -> dict:
         new_filters = {
             "$and": [
                 {
-                    kwargs["date_field"]:{ 
+                    kwargs["date_field"]:{
                         "$gte": filters["from_date"], "$lte": filters["to_date"]
                     }
-                }, 
+                },
                 {
                     kwargs["rfc_field"]: filters["rfc"]
                 }
@@ -62,6 +62,7 @@ def validate_params(params: dict) -> bool:
             return False
     return False
 
+
 def get_set_dict():
     return {
         "tipo": "$datos.Tipo",
@@ -73,15 +74,15 @@ def get_set_dict():
         "xml_estado": "V",
         "xml_subtotal": "$nomina.TotalPercepciones",
         "giro_subtotal": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.subtotal"]},
-        "xml_impuesto_gravado": {"$cond": [{"$eq": [{"$type": "$nomina.Percepciones"}, 3]}, "$nomina.Percepciones.TotalGravado", "0.00"]},
+        "xml_impuesto_gravado": {"$cond": [{"ne": ["$nomina.Percepciones.TotalGravado", None]}, "$nomina.Percepciones.TotalGravado", "0.00"]},
         "giro_impuesto_gravado": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_impuesto_gravado"]},
-        "xml_impuesto_exento": {"$cond": [{"$eq": [{"$type": "$nomina.Percepciones"}, 3]}, "$nomina.Percepciones.TotalExento", "0.00"]},
+        "xml_impuesto_exento": {"$cond": [{"$ne": ["$nomina.Percepciones.TotalExento", None]}, "$nomina.Percepciones.TotalExento", "0.00"]},
         "giro_impuesto_exento": {"$cond": [{"$eq": ["$giro_data", None]}, "", "$giro_data.giro_impuesto_exento"]},
         "xml_otros_pagos": "$nomina.TotalOtrosPagos",
         "giro_otros_pagos": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_otros_pagos"]},
         "xml_iva": {"$toString": "$impuestos.TrasladoIVA"},
         "giro_iva": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_iva"]},
-        "xml_retencion": {"$cond": [{"$eq": [{"$type": "$nomina.Deducciones"}, 3]}, "$nomina.Deducciones.TotalImpuestosRetenidos", "0.00"]},
+        "xml_retencion": {"$cond": [{"$ne": ["$nomina.Deducciones.TotalImpuestosRetenidos", None]}, "$nomina.Deducciones.TotalImpuestosRetenidos", "0.00"]},
         "giro_retencion": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_retencion"]},
         "xml_descuento": "",
         "giro_descuento": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_descuneto"]},

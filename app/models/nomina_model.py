@@ -9,7 +9,7 @@ from app.utils import get_set_dict
 
 class Nomina(Model):
     collection = mongo.db[app.config["NOMINA_COLLECTION"]]
-    
+
     def save(self):
         """
         Guarda el documento de nomina actual
@@ -27,10 +27,12 @@ class Nomina(Model):
                 "from": "giro",
                 "localField": "_id",
                 "foreignField": "uuid",
-                "as": "giro"
+                "as": "giro_data"
             }},
             {"$project": {"_id": 1, "impuestos": 1, "datos": 1, "nomina": 1,
                           "giro_data": {"$arrayElemAt": ["$giro_data", 0]}}},
+            {"$project": {"_id": 1, "impuestos": 1, "datos": 1, "nomina": 1,
+                          "giro_data": {"$ifNull": ["$giro_data", None]}}},
             {"$set": get_set_dict()},
             {"$project": {"_id": 0, "impuestos": 0,
                           "datos": 0, "nomina": 0, "giro_data": 0}},

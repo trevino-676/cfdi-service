@@ -7,6 +7,7 @@ from bson.json_util import dumps
 
 from app.service import service
 from app.utils import FilterType, make_filters, validate_params
+from app import app
 
 nomina_routes = Blueprint("nomina", __name__, url_prefix="/v1/nomina")
 
@@ -50,12 +51,13 @@ def find_nomina():
     return resp
 
 
-@nomina_routes.route("/all", methods=["GET"])
+@nomina_routes.route("/all", methods=["POST"])
 def find_all_nominas():
     """find_all_nominas
     Busca todos los documentos que coincidan con los filtros
     """
     parameters = request.json
+    app.logger.info(parameters)
     if validate_params(parameters):
         if parameters["type"] == "date":
             nominas = service.find(
