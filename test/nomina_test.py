@@ -30,15 +30,16 @@ class NominaTest(unittest.TestCase):
         payload = {
             "type": "date",
             "filters": {
-                "from_date": "2021-01-01",
-                "to_date": "2021-01-04",
+                "from_date": "2021-01-10",
+                "to_date": "2021-01-11",
                 "rfc": "GPR070228780",
+                "tipo_nomina": "SM40"
             },
+            "nomina_type": "SM40"
         }
-        resp = self.app.get(
+        resp = self.app.post(
             "/v1/nomina/all", headers=self.headers, data=json.dumps(payload)
         )
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(True, resp.json["status"])
-        self.assertGreater(len(resp.json["data"]), 0)

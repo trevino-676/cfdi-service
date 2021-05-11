@@ -66,14 +66,14 @@ def find_all_nominas():
                     parameters["filters"],
                     date_field="datos.Fecha",
                     rfc_field="datos.Rfc",
-                )
+                ), parameters["filters"]["tipo_nomina"]
             )
         else:
             nominas = service.find(
                 make_filters(
                     FilterType.AND if parameters["type"] == "and" else FilterType.OR,
                     parameters["filters"],
-                )
+                ), parameters["nomina_type"]
             )
     else:
         nominas = service.find({})

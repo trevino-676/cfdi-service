@@ -9,14 +9,14 @@ from app.repository import Repository
 from app import app
 
 class NominaMongoRepository(Repository):
-    def find(self, filters: dict) -> list:
+    def find(self, filters: dict, nomina_type:str = None) -> list:
         """
         Busca los documentos de nomina en la base de datos
         :param filters: diccionario con los filtros de busqueda
         :return: lista con todos los documentos de nomina encontrados
         """
         try:
-            nominas = Nomina.find_all(filters)
+            nominas = Nomina.find_all(filters, nomina_type)
             app.logger.info(f"Se encontraro {len(nominas)} documentos")
             return nominas
         except Exception as e:

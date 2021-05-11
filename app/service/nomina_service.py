@@ -14,5 +14,5 @@ class NominaService(Service):
     def find_one(self, filters: dict) -> dict:
         return self.repository.find_one(filters)
 
-    def find(self, filters: dict) -> list:
-        return self.repository.find(filters)
+    def find(self, filters: dict, nomina_type:str = None) -> list:
+        return self.repository.find(filters, nomina_type)
