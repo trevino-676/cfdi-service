@@ -24,10 +24,10 @@ def make_filters(type: FilterType, filters: dict, **kwargs) -> dict:
     new_filters = {}
     if type == FilterType.AND:
         new_filters = {"$and": [{item: value}
-                                for item, value in filters.items()]}
+                                for item, value in filters.items() if item != "tipo_nomina"]}
     elif type == FilterType.OR:
         new_filters = {"$or": [{item: value}
-                               for item, value in filters.items()]}
+                               for item, value in filters.items() if item != "tipo_nomina"]}
     elif type == FilterType.DATE:
         new_filters = {
             "$and": [
@@ -90,5 +90,7 @@ def get_set_dict():
         "giro_total": {"$cond": [{"$eq": ["$giro_data", None]}, "0.00", "$giro_data.giro_total"]},
         "uso": "P01",
         "descripcion": "Por definir",
-        "uuid": "$_id"
+        "uuid": "$_id",
+        "nombre_receptor": "$Receptor.Nombre",
+        "rfc_receptor": "$Receptor.Rfc"
     }

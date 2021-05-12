@@ -73,7 +73,7 @@ def find_all_nominas():
                 make_filters(
                     FilterType.AND if parameters["type"] == "and" else FilterType.OR,
                     parameters["filters"],
-                ), parameters["nomina_type"]
+                ), parameters["filters"]["tipo_nomina"]
             )
     else:
         nominas = service.find({})
