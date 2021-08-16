@@ -34,6 +34,9 @@ def create_app(settings_module="config.Config"):
     from app.routes import giro_routes
     app.register_blueprint(giro_routes)
 
+    from app.routes import principal_routes
+    app.register_blueprint(principal_routes)
+
     return app
 
 
