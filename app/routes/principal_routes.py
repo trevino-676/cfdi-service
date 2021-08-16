@@ -3,6 +3,7 @@ author: ErrataSEV
 date: 12/08/2021
 """
 from flask import Blueprint, make_response, request
+from flask_cors import cross_origin
 from bson.json_util import dumps
 
 from app.service import principal_service
@@ -13,6 +14,7 @@ principal_routes = Blueprint("principal", __name__, url_prefix="/v1/principal")
 
 
 @principal_routes.route("/", methods=["GET"])
+@cross_origin()
 def find_principal():
     """
     Busca un solo documento de ingresos que coincida con los filtros
@@ -52,6 +54,7 @@ def find_principal():
 
 
 @principal_routes.route("/all", methods=["POST"])
+@cross_origin()
 def find_all_cfdis():
     """find_all_cfdis
     Busca todos los documentos que coincidan con los filtros
@@ -81,6 +84,7 @@ def find_all_cfdis():
 
 
 @principal_routes.route("/get-group", methods=["POST"])
+@cross_origin()
 def find_data_basics():
     """find_all_cfdis
     Busca todos los documentos que coincidan con los filtros
@@ -132,6 +136,7 @@ def find_data_basics():
 
 
 @principal_routes.route("/get-count", methods=["POST"])
+@cross_origin()
 def data_count():
     """data_count
     Hace un conteo de los documentos que coincidan con los filtros
