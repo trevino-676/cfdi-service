@@ -6,14 +6,17 @@ import logging
 
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 
 mongo = PyMongo()
 mongo_cfdi = PyMongo()
 app = None
+cors = None
 
 
 def create_app(settings_module="config.Config"):
     global app
+    global cors
     global mongo
     global mongo_cfdi
 
@@ -22,11 +25,14 @@ def create_app(settings_module="config.Config"):
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(settings_module)
+    cors = CORS(app)
+    app.config["CORS_HEADERS"] = "Content-Type"
 
     configure_logging(app)
 
     mongo.init_app(app, authSource="admin")
-    mongo_cfdi.init_app(app, uri=app.config["MONGO_CFDI_URI"], authSource="admin")
+    mongo_cfdi.init_app(
+        app, uri=app.config["MONGO_CFDI_URI"], authSource="admin")
 
     from app.routes import nomina_routes
     app.register_blueprint(nomina_routes)

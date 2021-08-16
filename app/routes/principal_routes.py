@@ -160,19 +160,22 @@ def data_count():
                 "subtotal": {"$sum": "$datos.SubTotal"}
             }}
         ])
+        if cfdis is None or len(cfdis) == 0:
+            resp = make_response(
+                dumps(
+                    {"status": False, "message": "No se encontro ningun recibo de nomina"}
+                ),
+                404,
+            )
+        resp = make_response(dumps({"status": True, "data": cfdis}), 200)
     except Exception as e:
-        print(e)
-        message = str(e)
-        cfdi = None
-    if cfdis is None or len(cfdis) == 0:
+        app.logger.error(e)
         resp = make_response(
             dumps(
                 {"status": False, "message": "No se encontro ningun recibo de nomina"}
             ),
             404,
         )
-    else:
-        resp = make_response(dumps({"status": True, "data": cfdis}), 200)
 
     resp.headers["Content-Type"] = "application/json"
     return resp
