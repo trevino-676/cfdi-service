@@ -27,3 +27,4 @@ class Config:
     DB_NAME = environ.get("DB_NAME")
     NOMINA_COLLECTION = environ.get("NOMINA_COLLECTION")
     GIRO_COLLECTION = environ.get("GIRO_COLLECTION")
+    PRINCIPAL_COLLECTION = environ.get("PRINCIPAL_COLLECTION")
