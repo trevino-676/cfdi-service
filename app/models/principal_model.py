@@ -6,6 +6,7 @@ from warnings import filters
 from app import mongo_cfdi as mongo, app
 from app.models import Model
 
+
 class Principal(Model):
     collection = mongo.db[app.config["PRINCIPAL_COLLECTION"]]
 
@@ -15,6 +16,6 @@ class Principal(Model):
         return list(cfdis)
 
     @classmethod
-    def find_agg(cls, filter:list):
+    def find_agg(cls, filter: list):
         cfdis = cls.collection.aggregate(filter)
         return list(cfdis)

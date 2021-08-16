@@ -58,12 +58,12 @@ def find_all_cfdis():
     """
     parameters = request.form.to_dict()
     filters = {}
-    for k,v in parameters.items():
-        if v == "null" :
+    for k, v in parameters.items():
+        if v == "null":
             filters[k] = None
         else:
             filters[k] = v
-    
+
     cfdis = principal_service.find(filters)
 
     if cfdis is None or len(cfdis) == 0:
@@ -79,6 +79,7 @@ def find_all_cfdis():
     resp.headers["Content-Type"] = "application/json"
     return resp
 
+
 @principal_routes.route("/get-group", methods=["POST"])
 def find_data_basics():
     """find_all_cfdis
@@ -87,24 +88,24 @@ def find_data_basics():
 
     parameters = request.form.to_dict()
     filters = {}
-    for k,v in parameters.items():
-        if v == "null" :
+    for k, v in parameters.items():
+        if v == "null":
             filters[k] = None
         else:
             filters[k] = v
-    response = {"top":[],"data":[]}
+    response = {"top": [], "data": []}
     try:
         cfdis = principal_service.aggregate([
             {"$match": {
-                    filters["fieldMatch"]: filters["user"],
-                    "datos.Fecha": {
-                        "$gte": filters["dateBegin"],
-                        "$lte": filters["dateEnd"]
-                    }
+                filters["fieldMatch"]: filters["user"],
+                "datos.Fecha": {
+                    "$gte": filters["dateBegin"],
+                    "$lte": filters["dateEnd"]
+                }
             }},
             {"$group": {
-                "_id": "$"+filters["fieldGroup"], 
-                "count": {"$sum":1}
+                "_id": "$"+filters["fieldGroup"],
+                "count": {"$sum": 1}
             }}
         ])
         response["data"] = [filters["data"].split(",")]
@@ -129,26 +130,27 @@ def find_data_basics():
     resp.headers["Content-Type"] = "application/json"
     return resp
 
+
 @principal_routes.route("/get-count", methods=["POST"])
 def data_count():
     """data_count
     Hace un conteo de los documentos que coincidan con los filtros
     """
-    
+
     parameters = request.form.to_dict()
     try:
         cfdis = principal_service.aggregate([
             {"$match": {
-                    parameters["fieldMatch"]: parameters["user"],
-                    "datos.Fecha": {
-                        "$gte": parameters["dateBegin"],
-                        "$lte": parameters["dateEnd"]
-                    },
-                    "datos.Cancelado": None
+                parameters["fieldMatch"]: parameters["user"],
+                "datos.Fecha": {
+                    "$gte": parameters["dateBegin"],
+                    "$lte": parameters["dateEnd"]
+                },
+                "datos.Cancelado": None
             }},
             {"$group": {
-                "_id": "$"+parameters["fieldMatch"], 
-                "count": {"$sum":1},
+                "_id": "$"+parameters["fieldMatch"],
+                "count": {"$sum": 1},
                 "total": {"$sum": "$datos.Total"},
                 "subtotal": {"$sum": "$datos.SubTotal"}
             }}
@@ -169,5 +171,3 @@ def data_count():
 
     resp.headers["Content-Type"] = "application/json"
     return resp
-
-

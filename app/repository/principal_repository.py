@@ -8,6 +8,7 @@ from app.models import Principal
 from app.repository import Repository
 from app import app
 
+
 class PrincipalMongoRepository(Repository):
     def find(self, filters: dict) -> list:
         """
@@ -37,7 +38,7 @@ class PrincipalMongoRepository(Repository):
         except Exception as e:
             app.logger.error(e)
             return None
-    
+
     def aggregate(self, filters: list) -> dict:
         """
         Busqueda de tipo aggregate a la coleccion de principal
@@ -51,4 +52,3 @@ class PrincipalMongoRepository(Repository):
         except Exception as e:
             app.logger.error(e)
             return None
-
