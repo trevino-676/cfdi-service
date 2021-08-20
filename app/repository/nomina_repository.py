@@ -37,9 +37,9 @@ class NominaMongoRepository(Repository):
             app.logger.error(e)
             return None
 
-    def find_by_period(self, filters: dict):
+    def find_by_period(self, filters: dict, company_rfc: str):
         try:
-            nominas = Nomina.find_by_period(filters)
+            nominas = Nomina.find_by_period(filters, company_rfc)
             return nominas
         except Exception as e:
             app.logger.error(e)

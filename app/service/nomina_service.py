@@ -17,6 +17,6 @@ class NominaService(Service):
     def find(self, filters: dict, nomina_type: str = None) -> list:
         return self.repository.find(filters, nomina_type)
 
-    def find_by_period(self, filters: dict):
+    def find_by_period(self, filters: dict, company_rfc: str):
         service = NominaMongoRepository()
-        return service.find_by_period(filters)
+        return service.find_by_period(filters, company_rfc)

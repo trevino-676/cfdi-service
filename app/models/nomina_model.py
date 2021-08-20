@@ -44,7 +44,7 @@ class Nomina(Model):
         return list(nominas)
 
     @classmethod
-    def find_by_period(cls, filters: dict):
+    def find_by_period(cls, filters: dict, company_rfc: str):
         pipeline = [
             {"$match": filters},
             {"$lookup": {
@@ -55,6 +55,7 @@ class Nomina(Model):
             }},
             {"$set": {"nomina": {"$arrayElemAt": ["$nomina_data", 0]}}},
             {"$project": {"nomina_data": 0}},
+            {"$match": {"nomina.datos.Rfc": company_rfc}},
             {"$set": get_period_set()},
             {"$project": {
                 "uuid": 0, "_id": 0, "giro": 0, "subtotal": 0,

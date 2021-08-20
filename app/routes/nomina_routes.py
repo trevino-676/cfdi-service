@@ -102,7 +102,7 @@ def get_by_period():
     if "tipo_nomina" in request.json:
         filters["tipo_nomina"] = request.json["tipo_nomina"]
 
-    data = service.find_by_period(filters)
+    data = service.find_by_period(filters, request.json["rfc"])
     if not data:
         return make_response(
             dumps(
