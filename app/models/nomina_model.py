@@ -4,7 +4,7 @@ date: 12/04/2021
 """
 from app import mongo_cfdi as mongo, app
 from app.models import Model
-from app.utils import get_set_dict
+from app.utils import get_set_dict, get_period_set
 
 
 class Nomina(Model):
@@ -29,10 +29,10 @@ class Nomina(Model):
                 "foreignField": "uuid",
                 "as": "giro_data"
             }},
-            {"$project": {"_id": 1, "Receptor": 1, "impuestos": 1, "datos": 1, "nomina": 1,
-                          "giro_data": {"$arrayElemAt": ["$giro_data", 0]}}},
-            {"$project": {"_id": 1, "Receptor": 1, "impuestos": 1, "datos": 1, "nomina": 1,
-                          "giro_data": {"$ifNull": ["$giro_data", None]}}},
+            {"$project": {"_id": 1, "Receptor": 1, "impuestos": 1, "datos": 1,
+                          "nomina": 1, "giro_data": {"$arrayElemAt": ["$giro_data", 0]}}},
+            {"$project": {"_id": 1, "Receptor": 1, "impuestos": 1, "datos": 1,
+                          "nomina": 1, "giro_data": {"$ifNull": ["$giro_data", None]}}},
             {"$match": {"giro_data": {"$ne": None},
                         "giro_data.tipo_nomina": nomina_type}},
             {"$set": get_set_dict()},
@@ -41,4 +41,29 @@ class Nomina(Model):
             {"$sort": {"fecha_comprobante": 1}},
         ]
         nominas = cls.collection.aggregate(pipeline)
+        return list(nominas)
+
+    @classmethod
+    def find_by_period(cls, filters: dict):
+        pipeline = [
+            {"$match": filters},
+            {"$lookup": {
+                "from": "nomina",
+                "localField": "uuid",
+                "foreignField": "_id",
+                "as": "nomina_data"
+            }},
+            {"$set": {"nomina": {"$arrayElemAt": ["$nomina_data", 0]}}},
+            {"$project": {"nomina_data": 0}},
+            {"$set": get_period_set()},
+            {"$project": {
+                "uuid": 0, "_id": 0, "giro": 0, "subtotal": 0,
+                "giro_impuesto_gravado": 0, "giro_impuesto_exento": 0,
+                "giro_otros_pagos": 0, "giro_iva": 0,
+                "giro_retencion": 0, "giro_descuento": 0, "giro_total": 0,
+                "tipo_nomina": 0, "periodo": 0,
+                "nomina": 0
+            }}
+        ]
+        nominas = mongo.db.giro.aggregate(pipeline)
         return list(nominas)

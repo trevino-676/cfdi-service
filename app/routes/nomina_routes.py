@@ -3,6 +3,7 @@ author: Luis Manuel Torres Trevino
 date: 12/04/2021
 """
 from flask import Blueprint, make_response, request
+from flask_cors import cross_origin
 from bson.json_util import dumps
 
 from app.service import service
@@ -90,3 +91,30 @@ def find_all_nominas():
 
     resp.headers["Content-Type"] = "application/json"
     return resp
+
+
+@nomina_routes.route("/by_period", methods=["POST"])
+@cross_origin()
+def get_by_period():
+    filters = {}
+    if "periodos" in request.json:
+        filters["periodo"] = {"$in": request.json["periodos"]}
+    if "tipo_nomina" in request.json:
+        filters["tipo_nomina"] = request.json["tipo_nomina"]
+
+    data = service.find_by_period(filters)
+    if not data:
+        return make_response(
+            dumps(
+                {"status": False, "message": "Hubo un error al buscar la informacion"}),
+            404
+        )
+
+    return make_response(dumps({"status": True, "data": data}), 200)
+
+
+@nomina_routes.after_request
+def after_request(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Content-Type"] = "application/json"
+    return response

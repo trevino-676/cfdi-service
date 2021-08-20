@@ -2,14 +2,13 @@
 author: Luis Manuel Torres Trevino
 date: 12/04/2021
 """
-from bson import ObjectId
-
 from app.models import Nomina
 from app.repository import Repository
 from app import app
 
+
 class NominaMongoRepository(Repository):
-    def find(self, filters: dict, nomina_type:str = None) -> list:
+    def find(self, filters: dict, nomina_type: str = None) -> list:
         """
         Busca los documentos de nomina en la base de datos
         :param filters: diccionario con los filtros de busqueda
@@ -38,3 +37,10 @@ class NominaMongoRepository(Repository):
             app.logger.error(e)
             return None
 
+    def find_by_period(self, filters: dict):
+        try:
+            nominas = Nomina.find_by_period(filters)
+            return nominas
+        except Exception as e:
+            app.logger.error(e)
+            return None

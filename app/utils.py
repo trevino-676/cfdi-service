@@ -94,3 +94,37 @@ def get_set_dict():
         "nombre_receptor": "$Receptor.Nombre",
         "rfc_receptor": "$Receptor.Rfc"
     }
+
+
+def get_period_set():
+    return {
+        "tipo": "$nomina.datos.Tipo",
+        "fecha_comprobante": "$nomina.datos.Fecha",
+        "fecha_cancelacion": "",
+        "giro": "$giro",
+        "rfc_emisor": "$nomina.datos.Rfc",
+        "nombre_direccion": "$nomina.datos.Nombre",
+        "xml_estado": "V",
+        "xml_subtotal": "$nomina.nomina.TotalPercepciones",
+        "giro_subtotal": "$subtotal",
+        "xml_impuesto_gravado": {"$cond": [{"ne": ["$nomina.nomina.Percepciones.TotalGravado", None]}, "$nomina.nomina.Percepciones.TotalGravado", "0.00"]},
+        "giro_impuesto_gravado": "$giro_impuesto_gravado",
+        "xml_impuesto_exento": {"$cond": [{"$ne": ["$nomina.nomina.Percepciones.TotalExento", None]}, "$nomina.nomina.Percepciones.TotalExento", "0.00"]},
+        "giro_impuesto_exento": "$giro_impuesto_exento",
+        "xml_otros_pagos": "$nomina.nomina.TotalOtrosPagos",
+        "giro_otros_pagos": "$giro_otros_pagos",
+        "xml_iva": {"$toString": "$nomina.impuestos.TrasladoIVA"},
+        "giro_iva": "$giro_iva",
+        "xml_retencion": {"$cond": [{"$ne": ["$nomina.nomina.Deducciones.TotalImpuestosRetenidos", None]}, "$nomina.nomina.Deducciones.TotalImpuestosRetenidos", "0.00"]},
+        "giro_retencion": "$giro_retencion",
+        "xml_descuento": "$nomina.datos.Descuento",
+        "giro_descuento": "$giro_descuento",
+        "xml_total": "$nomina.datos.Total",
+        "giro_total": "$giro_total",
+        "uso": "P01",
+        "descripcion": "Por definir",
+        "uuid": "$uuid",
+        "nombre_receptor": "$nomina.Receptor.Nombre",
+        "rfc_receptor": "$nomina.Receptor.Rfc",
+        "periodo_giro": "$periodo",
+    }
