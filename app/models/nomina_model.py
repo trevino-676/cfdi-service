@@ -58,12 +58,7 @@ class Nomina(Model):
             {"$match": {"nomina.datos.Rfc": company_rfc}},
             {"$set": get_period_set()},
             {"$project": {
-                "uuid": 0, "_id": 0, "giro": 0, "subtotal": 0,
-                "giro_impuesto_gravado": 0, "giro_impuesto_exento": 0,
-                "giro_otros_pagos": 0, "giro_iva": 0,
-                "giro_retencion": 0, "giro_descuento": 0, "giro_total": 0,
-                "tipo_nomina": 0, "periodo": 0,
-                "nomina": 0
+                "nomina": 0, "_id": 0, "subtotal": 0, "periodo": 0, "tipo_nomina": 0
             }}
         ]
         nominas = mongo.db.giro.aggregate(pipeline)
