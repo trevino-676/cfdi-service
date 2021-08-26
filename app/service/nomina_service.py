@@ -20,3 +20,6 @@ class NominaService(Service):
     def find_by_period(self, filters: dict, company_rfc: str):
         service = NominaMongoRepository()
         return service.find_by_period(filters, company_rfc)
+        
+    def aggregate(self, filters: list) -> dict:
+        return self.repository.aggregate(filters)

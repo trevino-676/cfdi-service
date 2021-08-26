@@ -43,6 +43,9 @@ def create_app(settings_module="config.Config"):
     from app.routes import principal_routes
     app.register_blueprint(principal_routes)
 
+    from app.routes import pagos_routes
+    app.register_blueprint(pagos_routes)
+
     return app
 
 

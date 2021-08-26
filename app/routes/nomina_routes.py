@@ -112,6 +112,51 @@ def get_by_period():
 
     return make_response(dumps({"status": True, "data": data}), 200)
 
+@nomina_routes.route("/get-group", methods=["POST"])
+@cross_origin()
+def find_data_basics():
+    """find_all_cfdis
+    Busca todos los documentos que coincidan con los filtros
+    """
+
+    parameters = request.form.to_dict()
+    filters = {}
+    for k, v in parameters.items():
+        if v == "null":
+            filters[k] = None
+        else:
+            filters[k] = v
+    try:
+        cfdis = service.aggregate([
+            {"$match": {
+                filters["fieldMatch"]: filters["user"],
+                "datos.Fecha": {
+                    "$gte": filters["dateBegin"],
+                    "$lte": filters["dateEnd"]
+                }
+            }},
+            {"$group": {
+                "_id": "$"+filters["fieldGroup"],
+                "count": {"$sum": 1}
+            }}
+        ])
+    except Exception as e:
+        print(e)
+        message = str(e)
+        cfdi = None
+    if cfdis is None or len(cfdis) == 0:
+        resp = make_response(
+            dumps(
+                {"status": True, "data": []}
+            ),
+            200,
+        )
+    else:
+        resp = make_response(dumps({"status": True, "data": cfdis}), 200)
+
+    resp.headers["Content-Type"] = "application/json"
+    return resp
+
 
 @nomina_routes.after_request
 def after_request(response):

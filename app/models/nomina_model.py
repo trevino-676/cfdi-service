@@ -68,3 +68,8 @@ class Nomina(Model):
         ]
         nominas = mongo.db.giro.aggregate(pipeline)
         return list(nominas)
+    
+    @classmethod
+    def find_agg(cls, filter: list):
+        cfdis = cls.collection.aggregate(filter)
+        return list(cfdis)

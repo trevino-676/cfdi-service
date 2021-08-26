@@ -6,31 +6,30 @@ from flask import Blueprint, make_response, request
 from flask_cors import cross_origin
 from bson.json_util import dumps
 
-from app.service import principal_service
+from app.service import pagos_service
 from app.utils import FilterType, make_filters, validate_params
 from app import app
 
-principal_routes = Blueprint("principal", __name__, url_prefix="/v1/principal")
+pagos_routes = Blueprint("pagos", __name__, url_prefix="/v1/pagos")
 
 
-@principal_routes.route("/", methods=["GET"])
+@pagos_routes.route("/", methods=["GET"])
 @cross_origin()
 def find_principal():
     """
     Busca un solo documento de ingresos que coincida con los filtros
     """
     parameters = request.args
-    message = ""
     try:
         if validate_params(parameters):
-            cfdi = principal_service.find_one(
+            cfdi = pagos_service.find_one(
                 make_filters(
                     FilterType.AND if parameters["type"] == "and" else FilterType.OR,
                     parameters["filters"],
                 )
             )
         else:
-            cfdi = principal_service.find_one({})
+            cfdi = pagos_service.find_one({})
     except Exception as e:
         message = str(e)
         cfdi = None
@@ -53,7 +52,7 @@ def find_principal():
     return resp
 
 
-@principal_routes.route("/all", methods=["POST"])
+@pagos_routes.route("/all", methods=["POST"])
 @cross_origin()
 def find_all_cfdis():
     """find_all_cfdis
@@ -67,7 +66,7 @@ def find_all_cfdis():
         else:
             filters[k] = v
 
-    cfdis = principal_service.find(filters)
+    cfdis = pagos_service.find(filters)
 
     if cfdis is None or len(cfdis) == 0:
         resp = make_response(
@@ -83,7 +82,7 @@ def find_all_cfdis():
     return resp
 
 
-@principal_routes.route("/get-group", methods=["POST"])
+@pagos_routes.route("/get-group", methods=["POST"])
 @cross_origin()
 def find_data_basics():
     """find_all_cfdis
@@ -92,14 +91,13 @@ def find_data_basics():
 
     parameters = request.form.to_dict()
     filters = {}
-    message = ""
     for k, v in parameters.items():
         if v == "null":
             filters[k] = None
         else:
             filters[k] = v
     try:
-        cfdis = principal_service.aggregate([
+        cfdis = pagos_service.aggregate([
             {"$match": {
                 filters["fieldMatch"]: filters["user"],
                 "datos.Fecha": {
@@ -129,20 +127,19 @@ def find_data_basics():
     return resp
 
 
-@principal_routes.route("/get-count", methods=["POST"])
+@pagos_routes.route("/get-count", methods=["POST"])
 @cross_origin()
 def data_count():
     """data_count
-    Hace un conteo de los documentos que coincidan con los filtros
+    Hace una suma de los documentos que coincidan con los filtros
     """
-
     parameters = request.form.to_dict()
     if (not "totalCol" in parameters) :
         parameters["totalCol"] = "datos.Total"
     if (not "subTotalCol" in parameters) :
         parameters["subTotalCol"] = "datos.SubTotal"
     try:
-        cfdis = principal_service.aggregate([
+        cfdis = pagos_service.aggregate([
             {"$match": {
                 parameters["fieldMatch"]: parameters["user"],
                 "datos.Fecha": {
@@ -176,7 +173,7 @@ def data_count():
         app.logger.error(e)
         resp = make_response(
             dumps(
-                {"status": False, "message": "No se encontro ningun recibo de nomina"}
+                {"status": False, "message": "No se encontro ningun cfdi de pagos"}
             ),
             404,
         )

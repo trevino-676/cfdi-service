@@ -44,3 +44,17 @@ class NominaMongoRepository(Repository):
         except Exception as e:
             app.logger.error(e)
             return None
+
+    def aggregate(self, filters: list) -> dict:
+        """
+        Busqueda de tipo aggregate a la coleccion de Nomina
+        :param filters: lista de diccionarios con los filtros de busqueda
+        :return: diccionario con los datos correspondientes.
+        """
+        try:
+            cfdi = Nomina.find_agg(filters)
+            app.logger.info(f"Respuesta con {len(cfdi)} datos")
+            return cfdi
+        except Exception as e:
+            app.logger.error(e)
+            return None
