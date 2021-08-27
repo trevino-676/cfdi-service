@@ -107,15 +107,27 @@ def get_period_set():
         "xml_estado": "V",
         "xml_subtotal": "$nomina.nomina.TotalPercepciones",
         "giro_subtotal": "$subtotal",
-        "xml_impuesto_gravado": {"$cond": [{"ne": ["$nomina.nomina.Percepciones.TotalGravado", None]}, "$nomina.nomina.Percepciones.TotalGravado", "0.00"]},
+        "xml_impuesto_gravado": {
+            "$cond": [
+                {"ne": ["$nomina.nomina.Percepciones.TotalGravado", None]},
+                "$nomina.nomina.Percepciones.TotalGravado",
+                "0.00"
+            ]
+        },
         "giro_impuesto_gravado": "$giro_impuesto_gravado",
-        "xml_impuesto_exento": {"$cond": [{"$ne": ["$nomina.nomina.Percepciones.TotalExento", None]}, "$nomina.nomina.Percepciones.TotalExento", "0.00"]},
+        "xml_impuesto_exento": {
+            "$cond": [
+                {"$ne": ["$nomina.nomina.Percepciones.TotalExento", None]},
+                "$nomina.nomina.Percepciones.TotalExento",
+                "0.00"
+            ]
+        },
         "giro_impuesto_exento": "$giro_impuesto_exento",
         "xml_otros_pagos": "$nomina.nomina.TotalOtrosPagos",
         "giro_otros_pagos": "$giro_otros_pagos",
         "xml_iva": {"$toString": "$nomina.impuestos.TrasladoIVA"},
         "giro_iva": "$giro_iva",
-        "xml_retencion": {"$cond": [{"$ne": ["$nomina.nomina.Deducciones.TotalImpuestosRetenidos", None]}, "$nomina.nomina.Deducciones.TotalImpuestosRetenidos", "0.00"]},
+        "xml_retencion": {"$toString": "$nomina.nomina.TotalDeducciones"},
         "giro_retencion": "$giro_retencion",
         "xml_descuento": "$nomina.datos.Descuento",
         "giro_descuento": "$giro_descuento",
