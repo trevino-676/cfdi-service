@@ -127,7 +127,7 @@ def get_period_set():
         "giro_otros_pagos": "$giro_otros_pagos",
         "xml_iva": {"$toString": "$nomina.impuestos.TrasladoIVA"},
         "giro_iva": "$giro_iva",
-        "xml_retencion": {"$toString": "$nomina.nomina.TotalDeducciones"},
+        "xml_retencion": {"$toString": "$nomina.nomina.Deducciones.TotalImpuestosRetenidos"},
         "giro_retencion": "$giro_retencion",
         "xml_descuento": "$nomina.datos.Descuento",
         "giro_descuento": "$giro_descuento",
